@@ -15,10 +15,6 @@ class LinkListCreateView(generics.ListCreateAPIView):
 # Create your views here.
 
 def Home(request, token):
-    urls = Link.objects.all()
-    print(urls.values())
-    for i in urls:
-        print(i)
     long_url = Link.objects.filter(short_url=token)[0]
     return redirect(long_url.original_url)
 
@@ -29,9 +25,6 @@ def Make(request):
         if form.is_valid():
             NewUrl = form.save(commit=False)
             token = shortner().issue_token()
-            token_list = [key['short_url'] for key in Link.objects.values()]
-            while token in token_list:
-                token = shortner().issue_token()
             NewUrl.short_url = token
             NewUrl.save()
         else:
